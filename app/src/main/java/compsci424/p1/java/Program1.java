@@ -85,10 +85,11 @@ public class Program1 {
             else if ("destroy".equalsIgnoreCase(command[0])) {
                 version1.destroy(pid);
             }
+            version1.showProcessInfo();  // process info after each command
         }
-        version1.showProcessInfo();  // process info after each command
 
         // 6. Repeat step 5, but with the Version 2 object.
+        System.out.println();
         for (String[] command : commands) {
             int pid = Integer.parseInt(command[1]);
             if ("create".equalsIgnoreCase(command[0])) {
