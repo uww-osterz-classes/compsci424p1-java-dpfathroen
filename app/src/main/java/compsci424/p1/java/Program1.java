@@ -85,8 +85,8 @@ public class Program1 {
             else if ("destroy".equalsIgnoreCase(command[0])) {
                 version1.destroy(pid);
             }
-            version1.showProcessInfo();  // process info after each command
         }
+        version1.showProcessInfo();  // process info after each command
 
         // 6. Repeat step 5, but with the Version 2 object.
         for (String[] command : commands) {
@@ -97,8 +97,8 @@ public class Program1 {
             else if ("destroy".equalsIgnoreCase(command[0])) {
                 version2.destroy(pid);
             }
-            version2.showProcessInfo();  // process info after each command
         }
+        version2.showProcessInfo();  // process info after each command
 
         // 7. Store the current system time in a variable
 
@@ -125,7 +125,6 @@ public class Program1 {
         //     the Version 1 running time.
 
         long endTimeV1 = System.currentTimeMillis();
-        System.out.println();
         System.out.println("Version 1 running time after 200 iterations: " + (endTimeV1 - startTimeV1) + " ms");
 
         // 8. Repeat step 7, but with the Version 2 object.
