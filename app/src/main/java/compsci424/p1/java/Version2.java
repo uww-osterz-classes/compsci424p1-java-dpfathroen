@@ -1,5 +1,5 @@
 /* COMPSCI 424 Program 1
- * Name:
+ * Name: Derya Fathroen
  */
 package compsci424.p1.java;
 
@@ -15,6 +15,7 @@ package compsci424.p1.java;
  */
 public class Version2 {
     // Declare any class/instance variables that you need here.
+    private Version2PCB[] pcbArray = new Version2PCB[16];
 
     /**
      * Default constructor. Use this to allocate (if needed) and
@@ -22,7 +23,7 @@ public class Version2 {
      * any other initialization that is needed. 
      */
     public Version2() {
-
+        pcbArray[0] = new Version2PCB(0, -1);
     }
     
     /**
@@ -30,7 +31,7 @@ public class Version2 {
      * @param parentPid the PID of the new process's parent
      * @return 0 if successful, not 0 if unsuccessful
      */
-    int create(int parentPid) {
+    public int create(int parentPid) {
         // If parentPid is not in the process hierarchy, do nothing; 
         // your code may return an error code or message in this case,
         // but it should not halt
@@ -43,8 +44,31 @@ public class Version2 {
         //    sibling (if any), and its younger sibling (if any)
 
         // You can decide what the return value(s), if any, should be.
-        // If you change the return type/value(s), update the Javadoc.
-        return 0; // often means "success" or "terminated normally"
+        // If you change the return type/value(s), update the Javadoc. return 0; often means "success" or "terminated normally"
+
+        if (parentPid < 0 || parentPid >= pcbArray.length || pcbArray[parentPid] == null) {
+            return -1; // Error: parentPid not in the process hierarchy
+        }
+
+        for (int i = 1; i < pcbArray.length; i++) {
+            if (pcbArray[i] == null) { // free PCB slot
+                pcbArray[i] = new Version2PCB(i, parentPid);
+                // step 2
+                if (pcbArray[parentPid].firstChild == null) {
+                    pcbArray[parentPid].firstChild = i; // process becomes first child
+                } 
+                else {
+                    int sibling = pcbArray[parentPid].firstChild;
+                    while (pcbArray[sibling].youngerSibling != null) {
+                        sibling = pcbArray[sibling].youngerSibling;
+                    }
+                    pcbArray[sibling].youngerSibling = i; // Set as younger sibling
+                    pcbArray[i].olderSibling = sibling; // Link back to older sibling
+                }
+                return 0; // Success
+            }
+        }
+        return -1; // No free PCB slots available
     }
 
     /**
@@ -53,7 +77,8 @@ public class Version2 {
      * @param targetPid the PID of the process to be destroyed
      * @return 0 if successful, not 0 if unsuccessful
      */
-    int destroy (int targetPid) {
+    
+    public int destroy (int targetPid) {
         // If targetPid is not in the process hierarchy, do nothing; 
         // your code may return an error code or message in this case,
         // but it should not halt
@@ -70,8 +95,34 @@ public class Version2 {
         //    as "free"
 
         // You can decide what the return value(s), if any, should be.
-        // If you change the return type/value(s), update the Javadoc.
-       return 0; // often means "success" or "terminated normally"
+        // If you change the return type/value(s), update the Javadoc. return 0; often means "success" or "terminated normally"
+
+        //step 1
+        if (targetPid < 0 || targetPid >= pcbArray.length || pcbArray[targetPid] == null) {
+            return -1; // // process not exist
+        }
+
+        Integer childPid = pcbArray[targetPid].firstChild;
+        while (childPid != null) {
+            Integer nextChild = pcbArray[childPid].youngerSibling;
+            destroy(childPid); // recursively destroy descendants
+            childPid = nextChild;
+        }
+
+        // step 2
+        if (pcbArray[targetPid].olderSibling != null) {
+            pcbArray[pcbArray[targetPid].olderSibling].youngerSibling = pcbArray[targetPid].youngerSibling;
+        }
+        if (pcbArray[targetPid].youngerSibling != null) {
+            pcbArray[pcbArray[targetPid].youngerSibling].olderSibling = pcbArray[targetPid].olderSibling;
+        }
+        if (pcbArray[targetPid].parentPid != -1 && pcbArray[pcbArray[targetPid].parentPid].firstChild == targetPid) {
+            pcbArray[pcbArray[targetPid].parentPid].firstChild = pcbArray[targetPid].youngerSibling;
+        }
+
+        // step 3
+        pcbArray[targetPid] = null;
+        return 0; // works
    }
 
    /**
@@ -84,9 +135,23 @@ public class Version2 {
     * change the return type of this function to return the text to
     * the main program for printing. It's your choice. 
     */
-   void showProcessInfo() {
-
-   }
+    public void showProcessInfo() {
+        for (int i = 0; i < pcbArray.length; i++) {
+            if (pcbArray[i] != null) {
+                System.out.print("Process " + i + ": parent is " + pcbArray[i].parentPid);
+                if (pcbArray[i].firstChild != null) {
+                    System.out.print(", first child is " + pcbArray[i].firstChild);
+                }
+                if (pcbArray[i].youngerSibling != null) {
+                    System.out.print(", younger sibling is " + pcbArray[i].youngerSibling);
+                }
+                if (pcbArray[i].olderSibling != null) {
+                    System.out.print(", older sibling is " + pcbArray[i].olderSibling);
+                }
+                System.out.println();
+            }
+        }
+    }
 
    /* If you need or want more methods, feel free to add them. */
 
