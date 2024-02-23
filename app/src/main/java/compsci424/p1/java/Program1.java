@@ -97,8 +97,8 @@ public class Program1 {
             else if ("destroy".equalsIgnoreCase(command[0])) {
                 version2.destroy(pid);
             }
+            version2.showProcessInfo();  // process info after each command
         }
-        version2.showProcessInfo();  // process info after each command
 
         // 7. Store the current system time in a variable
 
