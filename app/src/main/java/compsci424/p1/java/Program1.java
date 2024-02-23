@@ -77,9 +77,6 @@ public class Program1 {
         //    calling its showProcessTree method after each command to
         //    show the changes in the tree after each command.
         
-        System.out.println();
-        System.out.println("Version 1 Output:");
-        System.out.println();
         for (String[] command : commands) {
             int pid = Integer.parseInt(command[1]);
             if ("create".equalsIgnoreCase(command[0])) {
@@ -91,11 +88,7 @@ public class Program1 {
             version1.showProcessInfo();  // process info after each command
         }
 
-        System.out.println();
         // 6. Repeat step 5, but with the Version 2 object.
-
-        System.out.println("Version 2 Output:");
-        System.out.println();
         for (String[] command : commands) {
             int pid = Integer.parseInt(command[1]);
             if ("create".equalsIgnoreCase(command[0])) {
