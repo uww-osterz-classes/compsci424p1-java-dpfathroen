@@ -138,17 +138,8 @@ public class Version2 {
     public void showProcessInfo() {
         for (int i = 0; i < pcbArray.length; i++) {
             if (pcbArray[i] != null) {
-                System.out.print("Process " + i + ": parent is " + pcbArray[i].parentPid);
-                if (pcbArray[i].firstChild != null) {
-                    System.out.print(", first child is " + pcbArray[i].firstChild);
-                }
-                if (pcbArray[i].youngerSibling != null) {
-                    System.out.print(", younger sibling is " + pcbArray[i].youngerSibling);
-                }
-                if (pcbArray[i].olderSibling != null) {
-                    System.out.print(", older sibling is " + pcbArray[i].olderSibling);
-                }
-                System.out.println();
+                String childOutput = (pcbArray[i].firstChild == null) ? " has no children" : ", first child is " + pcbArray[i].firstChild;
+                System.out.println("Process " + i + ": parent is " + pcbArray[i].parentPid + childOutput);
             }
         }
     }

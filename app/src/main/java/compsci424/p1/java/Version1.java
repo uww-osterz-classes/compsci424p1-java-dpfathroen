@@ -118,11 +118,8 @@ public class Version1 {
     public void showProcessInfo() {
         for (Version1PCB pcb : pcbArray) {
             if (pcb != null) {
-                System.out.print("Process " + pcb.pid + ": parent is " + pcb.parentPid);
-                if (!pcb.children.isEmpty()) {
-                    System.out.print(", children are " + pcb.children);
-                }
-                System.out.println();
+                String childrenOutput = pcb.children.isEmpty() ? " has no children" : ", children are " + pcb.children;
+                System.out.println("Process " + pcb.pid + ": parent is " + pcb.parentPid + childrenOutput);
             }
         }
     }
