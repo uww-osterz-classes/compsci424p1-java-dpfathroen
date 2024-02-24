@@ -145,7 +145,7 @@ public class Version2 {
                     if (nextSibling != null) {
                         childInfo = " and children are " + pcbArray[i].firstChild;
                         while (nextSibling != null) {
-                            childInfo += ", " + nextSibling;
+                            childInfo += "," + nextSibling;
                             nextSibling = pcbArray[nextSibling].youngerSibling;
                         }
                     }

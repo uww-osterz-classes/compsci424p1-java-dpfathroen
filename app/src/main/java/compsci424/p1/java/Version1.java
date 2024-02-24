@@ -127,7 +127,7 @@ public class Version1 {
                     childInfo = " and child is " + pcb.children.get(0);
                 } 
                 else {
-                    childInfo = " and children are " + pcb.children.stream().map(Object::toString).collect(Collectors.joining(", "));
+                    childInfo = " and children are " + pcb.children.stream().map(Object::toString).collect(Collectors.joining(","));
                 }
                 String parentInfo = (pcb.parentPid == -1) ? "" : ": parent is " + pcb.parentPid;
                 System.out.println("Process " + pcb.pid + (pcb.parentPid == -1 ? childInfo.replaceFirst(" and", ":") : parentInfo + childInfo));
