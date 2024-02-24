@@ -47,7 +47,7 @@ public class Version2 {
         // If you change the return type/value(s), update the Javadoc. return 0; often means "success" or "terminated normally"
 
         if (parentPid < 0 || parentPid >= pcbArray.length || pcbArray[parentPid] == null) {
-            return -1; // Error: parentPid not in the process hierarchy
+            return -1; // invalid parent PID
         }
 
         for (int i = 1; i < pcbArray.length; i++) {
@@ -62,13 +62,13 @@ public class Version2 {
                     while (pcbArray[sibling].youngerSibling != null) {
                         sibling = pcbArray[sibling].youngerSibling;
                     }
-                    pcbArray[sibling].youngerSibling = i; // Set as younger sibling
-                    pcbArray[i].olderSibling = sibling; // Link back to older sibling
+                    pcbArray[sibling].youngerSibling = i; // set as younger sibling
+                    pcbArray[i].olderSibling = sibling; // link back to older sibling
                 }
-                return 0; // Success
+                return 0; // works
             }
         }
-        return -1; // No free PCB slots available
+        return -1; // no free PCB available
     }
 
     /**
@@ -138,17 +138,23 @@ public class Version2 {
     public void showProcessInfo() {
         for (int i = 0; i < pcbArray.length; i++) {
             if (pcbArray[i] != null) {
-                System.out.print("Process " + i + ": parent is " + pcbArray[i].parentPid);
+                String childInfo = "";
                 if (pcbArray[i].firstChild != null) {
-                    System.out.print(", first child is " + pcbArray[i].firstChild);
+                    childInfo = " and child is " + pcbArray[i].firstChild;
+                    Integer nextSibling = pcbArray[pcbArray[i].firstChild].youngerSibling;
+                    if (nextSibling != null) {
+                        childInfo = " and children are " + pcbArray[i].firstChild;
+                        while (nextSibling != null) {
+                            childInfo += ", " + nextSibling;
+                            nextSibling = pcbArray[nextSibling].youngerSibling;
+                        }
+                    }
+                } 
+                else {
+                    childInfo = " and has no children";
                 }
-                if (pcbArray[i].youngerSibling != null) {
-                    System.out.print(", younger sibling is " + pcbArray[i].youngerSibling);
-                }
-                if (pcbArray[i].olderSibling != null) {
-                    System.out.print(", older sibling is " + pcbArray[i].olderSibling);
-                }
-                System.out.println();
+                String parentInfo = (i == 0) ? "" : ": parent is " + pcbArray[i].parentPid;
+                System.out.println("Process " + i + (i == 0 ? childInfo.replaceFirst(" and", ":") : parentInfo + childInfo));
             }
         }
     }

@@ -5,6 +5,7 @@ package compsci424.p1.java;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /** 
  * Implements the process creation hierarchy for Version 1, which uses
@@ -118,15 +119,21 @@ public class Version1 {
     public void showProcessInfo() {
         for (Version1PCB pcb : pcbArray) {
             if (pcb != null) {
-                String childInfo = pcb.children.isEmpty() ? " and has no children" : ", child is " + pcb.children.get(0);
-                if (pcb.children.size() > 1) {
-                    childInfo = ", children are " + pcb.children.toString();
+                String childInfo;
+                if (pcb.children.isEmpty()) {
+                    childInfo = " and has no children";
                 }
-                System.out.println("Process " + pcb.pid + ": parent is " + pcb.parentPid + childInfo);
+                else if (pcb.children.size() == 1) {
+                    childInfo = " and child is " + pcb.children.get(0);
+                } 
+                else {
+                    childInfo = " and children are " + pcb.children.stream().map(Object::toString).collect(Collectors.joining(", "));
+                }
+                String parentInfo = (pcb.parentPid == -1) ? "" : ": parent is " + pcb.parentPid;
+                System.out.println("Process " + pcb.pid + (pcb.parentPid == -1 ? childInfo.replaceFirst(" and", ":") : parentInfo + childInfo));
             }
         }
     }
-
     /* If you need or want more methods, feel free to add them. */
     
 }

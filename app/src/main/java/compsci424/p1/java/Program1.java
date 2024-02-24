@@ -102,7 +102,6 @@ public class Program1 {
         }
 
         // 7. Store the current system time in a variable
-
         long startTimeV1 = System.currentTimeMillis();
 
         // ... then run the command sequence 200 times with Version 1.
@@ -126,6 +125,7 @@ public class Program1 {
         //     the Version 1 running time.
 
         long endTimeV1 = System.currentTimeMillis();
+        System.out.println();
         System.out.println("Version 1 running time after 200 iterations: " + (endTimeV1 - startTimeV1) + " ms");
 
         // 8. Repeat step 7, but with the Version 2 object.
